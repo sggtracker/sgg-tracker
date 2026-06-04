@@ -943,7 +943,7 @@ setInterval(rotateLine, 4000);
             </div>
             <div class="form-group">
               <label>SGG Attendees</label>
-              <input type="text" id="act-attendees-sgg" placeholder="e.g. Nishanth + Technical Manager">
+              <input type="text" id="act-attendees-sgg" placeholder="e.g. Nishant + Technical Manager">
             </div>
           </div>
 
@@ -979,59 +979,30 @@ setInterval(rotateLine, 4000);
           <div class="row4" style="gap:12px;margin-top:10px">
             <div class="form-group">
               <label>Form Element</label>
-              <select id="act-form">
-                <option value="">Select...</option><option>Roll</option><option>Sheet</option><option>Roll/Sheet</option>
+              <select id="act-form" onchange="updateFormFields()">
+                <option value="">Select...</option>
+                <option>Roll</option>
+                <option>Sheet</option>
+                <option>Roll/Sheet</option>
               </select>
             </div>
-            <div class="form-group">
-              <label class="req">Width Required (mm)</label>
-              <input type="number" id="act-width" placeholder="e.g. 330">
+            <div class="form-group" id="act-size-box" style="display:none">
+              <label>Size</label>
+              <input type="text" id="act-width" placeholder="e.g. A4, 330x500mm, 12x18 inch">
             </div>
-            <div class="form-group">
-              <label class="req">Caliper / Thickness (micron)</label>
-              <input type="number" id="act-caliper" placeholder="e.g. 80">
-            </div>
-            <div class="form-group">
-              <label class="req">Core Size (inch)</label>
+            <div class="form-group" id="act-core-box" style="display:none">
+              <label>Core Size (inch)</label>
               <select id="act-core">
-                <option value="">Select *</option>
+                <option value="">Select...</option>
                 <option>1"</option><option>1.5"</option><option>3"</option><option>6"</option>
               </select>
             </div>
-          </div>
-          <div class="row4" style="gap:12px;margin-top:10px">
             <div class="form-group">
-              <label class="req">Adhesive Type</label>
-              <select id="act-adhesive">
-                <option value="">Select *</option>
-                <option>Permanent</option><option>Removable</option><option>Freezer Grade</option>
-                <option>High Tack</option><option>Ultra Removable</option><option>No Adhesive</option><option>Other</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label class="req">Surface Finish</label>
-              <select id="act-finish">
-                <option value="">Select *</option>
-                <option>Gloss</option><option>Matte</option><option>Semi-Gloss</option><option>Satin</option><option>Other</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label>Max Reel Dia. (mm)</label>
-              <input type="number" id="act-reeldia" placeholder="e.g. 400">
-            </div>
-            <div class="form-group">
-              <label>Liner Type</label>
-              <select id="act-liner">
-                <option value="">Select...</option>
-                <option>Glassine</option><option>PE Liner</option><option>PET Liner</option><option>Paper</option><option>No Liner</option>
-              </select>
+              <label>Caliper / Thickness (micron)</label>
+              <input type="number" id="act-caliper" placeholder="e.g. 80">
             </div>
           </div>
           <div class="row2" style="gap:12px;margin-top:10px">
-            <div class="form-group">
-              <label>Machine Model & Speed</label>
-              <input type="text" id="act-machine" placeholder="e.g. Gallus EM 280 / 120m/min">
-            </div>
             <div class="form-group">
               <label>Temperature / Environment Spec</label>
               <select id="act-tempspec">
@@ -1081,7 +1052,7 @@ setInterval(rotateLine, 4000);
               <input type="hidden" id="act-currency" value="₹">
             </div>
             <div class="form-group">
-              <label class="req">Our Quoted Price (<span class="curr-lbl">₹</span>)</label>
+              <label>Our Quoted Price (<span class="curr-lbl">₹</span>)</label>
               <input type="number" step="0.01" id="act-ourprice" placeholder="0.00" oninput="calcPriceGap()">
             </div>
             <div class="form-group">
@@ -1119,25 +1090,6 @@ setInterval(rotateLine, 4000);
               </select>
             </div>
           </div>
-          <div class="row3" style="gap:12px;margin-top:10px">
-            <div class="form-group">
-              <label class="req">Incumbent Supplier</label>
-              <input type="text" id="act-supplier" placeholder="e.g. Avery Dennison">
-            </div>
-            <div class="form-group">
-              <label>Credit Limit Requested (₹)</label>
-              <input type="number" id="act-creditlimit" placeholder="e.g. 500000">
-            </div>
-            <div class="form-group">
-              <label>Payment Terms</label>
-              <select id="act-payterms">
-                <option value="">Select...</option>
-                <option>Advance</option><option>30 Days Credit</option><option>45 Days Credit</option>
-                <option>60 Days Credit</option><option>Other</option>
-              </select>
-            </div>
-          </div>
-
           <!-- COMPETITION INTEL -->
           <div class="form-section">Competition Intelligence</div>
           <div class="row3" style="gap:12px">
@@ -1313,7 +1265,18 @@ setInterval(rotateLine, 4000);
               <label>Next Action Owner</label>
               <select id="act-next-owner">
                 <option value="">Select...</option>
-                <option>SGG — on us</option><option>Customer — awaiting them</option><option>Both</option>
+                <optgroup label="Sales Team">
+                  <option>Nishant</option>
+                  <option>Satheesh</option>
+                  <option>Anuj</option>
+                  <option>Joy</option>
+                  <option>Admin</option>
+                  <option>Management</option>
+                </optgroup>
+                <optgroup label="Other">
+                  <option>Customer — awaiting them</option>
+                  <option>Both — SGG + Customer</option>
+                </optgroup>
               </select>
             </div>
           </div>
@@ -1348,6 +1311,38 @@ setInterval(rotateLine, 4000);
             <div class="form-group">
               <label class="req">Remarks / Interaction Synthesis</label>
               <textarea id="act-remarks" placeholder="Summary of this meeting interaction..."></textarea>
+            </div>
+          </div>
+
+          <!-- ── ATTACHMENT SECTION ── -->
+          <div class="form-section" style="margin-top:12px">
+            Attachment <span style="font-size:10px;color:var(--muted);font-weight:400">Optional — PDF, email, quote, spec sheet (max 50MB)</span>
+          </div>
+          <div style="margin-bottom:12px">
+            <div id="act-attachment-area" style="border:1.5px dashed #d0d0d0;border-radius:8px;padding:16px;text-align:center;cursor:pointer;transition:border .2s;background:#fafafa" onclick="document.getElementById('act-file-input').click()" ondragover="event.preventDefault();this.style.borderColor='#1F3864'" ondragleave="this.style.borderColor='#d0d0d0'" ondrop="handleFileDrop(event)">
+              <i class="ti ti-upload" aria-hidden="true" style="font-size:24px;color:#bbb;display:block;margin-bottom:6px"></i>
+              <div style="font-size:12px;color:#888">Click to upload or drag & drop</div>
+              <div style="font-size:10px;color:#bbb;margin-top:3px">PDF · HTML · DOC · Images — up to 50MB</div>
+              <input type="file" id="act-file-input" style="display:none" accept=".pdf,.html,.htm,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png,.eml" onchange="handleFileSelect(this)">
+            </div>
+
+            <!-- Upload progress -->
+            <div id="act-upload-progress" style="display:none;margin-top:10px">
+              <div style="font-size:11px;color:#666;margin-bottom:4px" id="act-upload-status">Uploading...</div>
+              <div style="background:#f0f0f0;border-radius:20px;height:6px;overflow:hidden">
+                <div id="act-upload-bar" style="background:#1F3864;height:6px;width:0%;border-radius:20px;transition:width .3s"></div>
+              </div>
+            </div>
+
+            <!-- Attachment preview -->
+            <div id="act-attachment-preview" style="display:none;margin-top:10px;background:#E6F1FB;border-radius:8px;padding:10px 14px;display:none;align-items:center;gap:10px">
+              <i class="ti ti-paperclip" aria-hidden="true" style="font-size:18px;color:#185fa5;flex-shrink:0"></i>
+              <div style="flex:1;min-width:0">
+                <div id="act-attachment-name" style="font-size:12px;font-weight:600;color:#1F3864;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></div>
+                <div style="font-size:10px;color:#888;margin-top:1px">Uploaded to Google Drive</div>
+              </div>
+              <a id="act-attachment-link" href="#" target="_blank" class="btn btn-sm" style="flex-shrink:0"><i class="ti ti-external-link" aria-hidden="true"></i> View</a>
+              <button class="btn btn-sm btn-danger" onclick="removeAttachment()" title="Remove attachment" style="flex-shrink:0"><i class="ti ti-x" aria-hidden="true"></i></button>
             </div>
           </div>
 
@@ -1401,7 +1396,7 @@ setInterval(rotateLine, 4000);
             <input type="text" id="admin-search" placeholder="Search all operators, companies, cities..." oninput="renderAdminTable()">
             <select id="admin-filter-user" onchange="renderAdminTable()">
               <option value="">All operators</option>
-              <option>Nishanth</option><option>Satheesh</option><option>Anuj</option><option>Joy</option>
+              <option>Nishant</option><option>Satheesh</option><option>Anuj</option><option>Joy</option>
             </select>
             <select id="admin-filter-status" onchange="renderAdminTable()">
               <option value="">All statuses</option>
@@ -1515,7 +1510,7 @@ setInterval(rotateLine, 4000);
             </select>
             <select id="pm-filter-re1" onchange="renderProductMaster()">
               <option value="">All reps</option>
-              <option>Nishanth</option><option>Satheesh</option><option>Anuj</option><option>Joy</option>
+              <option>Nishant</option><option>Satheesh</option><option>Anuj</option><option>Joy</option>
             </select>
             <select id="pm-filter-priority" onchange="renderProductMaster()">
               <option value="">All priorities</option>
@@ -1632,7 +1627,7 @@ setInterval(rotateLine, 4000);
               <label>Assigned Rep (RE1)</label>
               <select id="pf-re1">
                 <option value="">Select...</option>
-                <option>Nishanth</option><option>Satheesh</option><option>Anuj</option><option>Joy</option>
+                <option>Nishant</option><option>Satheesh</option><option>Anuj</option><option>Joy</option>
                 <option>Joy/ Anuj</option><option>Nishant / Gaurav</option><option>Anuj/Shetal</option>
               </select>
             </div>
@@ -1706,7 +1701,7 @@ setInterval(rotateLine, 4000);
             <input type="text" id="acts-search" placeholder="Search company, type, requirement..." oninput="renderAllActivities()">
             <select id="acts-filter-rep" onchange="renderAllActivities()" class="admin-only" style="display:none">
               <option value="">All reps</option>
-              <option>Nishanth</option><option>Satheesh</option><option>Anuj</option><option>Joy</option>
+              <option>Nishant</option><option>Satheesh</option><option>Anuj</option><option>Joy</option>
               <option>User1</option><option>User2</option><option>User3</option>
             </select>
             <select id="acts-filter-type" onchange="renderAllActivities()">
@@ -1742,6 +1737,7 @@ setInterval(rotateLine, 4000);
                 <th>Follow-up</th>
                 <th>Requirement</th>
                 <th>Next Action</th>
+                <th>Attachment</th>
               </tr></thead>
               <tbody id="acts-tbody"></tbody>
             </table>
@@ -1772,7 +1768,7 @@ setInterval(rotateLine, 4000);
             </select>
             <select id="st-filter-rep" onchange="renderSampleTracker()">
               <option value="">All reps</option>
-              <option>Nishanth</option><option>Satheesh</option><option>Anuj</option><option>Joy</option>
+              <option>Nishant</option><option>Satheesh</option><option>Anuj</option><option>Joy</option>
               <option>User1</option><option>User2</option><option>User3</option>
             </select>
             <button class="btn btn-primary" onclick="openSampleForm(null)">
@@ -2302,13 +2298,13 @@ async function loadLoginUsers() {
     } else {
       // Fallback to hardcoded if API fails
       sel.innerHTML = '<option value="">Select your name...</option>' +
-        ['Admin','Nishanth','Satheesh','Anuj','Joy','User1','User2','User3']
+        ['Admin','Nishant','Satheesh','Anuj','Joy','User1','User2','User3']
         .map(n => `<option>${n}</option>`).join('');
     }
   } catch(e) {
     // Fallback if network error
     sel.innerHTML = '<option value="">Select your name...</option>' +
-      ['Admin','Nishanth','Satheesh','Anuj','Joy','User1','User2','User3']
+      ['Admin','Nishant','Satheesh','Anuj','Joy','User1','User2','User3']
       .map(n => `<option>${n}</option>`).join('');
   }
 }
@@ -3010,11 +3006,10 @@ function toggleBlocker() {
 function saveDraft() {
   const ids=['act-company','act-date','act-type','act-mode','act-outcome-sentiment',
     'act-attendees-cust','act-attendees-sgg','act-category','act-prodcode','act-printtech',
-    'act-form','act-width','act-caliper','act-core','act-adhesive','act-finish',
-    'act-reeldia','act-liner','act-machine','act-tempspec','act-req',
+    'act-form','act-width','act-caliper','act-core','act-tempspec','act-req',
     'act-dm','act-qty','act-qtyunit','act-annualvol','act-currency',
     'act-ourprice','act-custprice','act-compprice','act-quote-validity',
-    'act-freight','act-buyfreq','act-supplier','act-creditlimit','act-payterms',
+    'act-freight','act-buyfreq',
     'act-comp-grade','act-comp-weakness','act-eval-trigger','act-num-suppliers',
     'act-comp-leadtime','act-comp-relage',
     'act-sampling','act-sample-qty','act-sample-date','act-sample-courier',
@@ -3064,6 +3059,7 @@ function loadDraft() {
 function clearDraft() {
   try{localStorage.removeItem(DRAFT_KEY);}catch(e){}
   document.getElementById('act-draft-banner').style.display='none';
+  resetAttachmentField();
 }
 
 function startDraftAutoSave() {
@@ -3086,14 +3082,13 @@ function validateActivityForm() {
     ['act-width','Width (mm)'],
     ['act-caliper','Caliper (micron)'],
     ['act-core','Core size'],
-    ['act-adhesive','Adhesive type'],
-    ['act-finish','Surface finish'],
+
     ['act-dm','Decision maker'],
     ['act-qty','Monthly volume'],
     ['act-qtyunit','Volume unit'],
-    ['act-ourprice','Our quoted price'],
+
     ['act-custprice','Customer target price'],
-    ['act-supplier','Incumbent supplier'],
+
     ['act-status','Pipeline status'],
     ['act-nextaction','Next action'],
     ['act-followup','Follow-up date'],
@@ -3147,11 +3142,7 @@ async function submitActivity() {
     widthMM:        document.getElementById('act-width').value,
     caliperMicron:  document.getElementById('act-caliper').value,
     coreSizeInch:   document.getElementById('act-core').value,
-    adhesiveType:   document.getElementById('act-adhesive').value,
-    surfaceFinish:  document.getElementById('act-finish').value,
-    maxReelDia:     document.getElementById('act-reeldia').value,
-    linerType:      document.getElementById('act-liner').value,
-    machine:        document.getElementById('act-machine').value.trim(),
+
     tempEnvSpec:    document.getElementById('act-tempspec').value,
     req:            document.getElementById('act-req').value.trim(),
     dm:             document.getElementById('act-dm').value.trim(),
@@ -3166,9 +3157,7 @@ async function submitActivity() {
     priceFloor:     document.getElementById('act-pricefloor').value,
     freightTerms:   document.getElementById('act-freight').value,
     buyingFrequency:document.getElementById('act-buyfreq').value,
-    supplier:       document.getElementById('act-supplier').value.trim(),
-    creditLimitReq: document.getElementById('act-creditlimit').value,
-    payterms:       document.getElementById('act-payterms').value,
+
     competitorGrade:    document.getElementById('act-comp-grade').value.trim(),
     competitorWeakness: document.getElementById('act-comp-weakness').value.trim(),
     evalTrigger:    document.getElementById('act-eval-trigger').value,
@@ -3199,6 +3188,8 @@ async function submitActivity() {
     expFirstOrderDate: document.getElementById('act-first-order').value,
     leadSource:     document.getElementById('act-leadsource').value,
     remarks:        document.getElementById('act-remarks').value.trim(),
+    attachmentUrl:  actAttachment?.url  || '',
+    attachmentName: actAttachment?.name || '',
   };
 
   const r=await api({action:'saveActivity',activity});
@@ -3210,6 +3201,21 @@ async function submitActivity() {
 
   clearDraft();
   toast('Activity committed successfully!','success');
+
+  // Refresh overdue/bell after new activity — overrides old overdue
+  const savedCustId = document.getElementById('act-company').value;
+  const savedFollowup = document.getElementById('act-followup').value;
+  const savedStatus = document.getElementById('act-status').value;
+  // Add to cache immediately so renderStrips picks it up
+  allActivitiesCache.push({
+    CustomerID: savedCustId,
+    Company: allCustomers.find(x=>x.ID===savedCustId)?.Company || '',
+    FollowupDate: savedFollowup,
+    StatusUpdate: savedStatus,
+    Owner: session.username,
+    CreatedOn: new Date().toISOString()
+  });
+  refreshOverdueAfterActivity(savedCustId, savedFollowup, savedStatus);
 
   // Auto-capture sample if sampling = Sent
   const samplingVal = document.getElementById('act-sampling').value;
@@ -3244,11 +3250,10 @@ async function submitActivity() {
 function resetActivityForm() {
   const allFields=['act-company','act-type','act-mode','act-outcome-sentiment',
     'act-attendees-cust','act-attendees-sgg','act-category','act-prodcode','act-printtech',
-    'act-form','act-width','act-caliper','act-core','act-adhesive','act-finish',
-    'act-reeldia','act-liner','act-machine','act-tempspec','act-req',
+    'act-form','act-width','act-caliper','act-core','act-tempspec','act-req',
     'act-dm','act-qty','act-qtyunit','act-annualvol',
     'act-ourprice','act-custprice','act-compprice','act-quote-validity','act-pricefloor',
-    'act-freight','act-buyfreq','act-supplier','act-creditlimit','act-payterms',
+    'act-freight','act-buyfreq',
     'act-comp-grade','act-comp-weakness','act-eval-trigger','act-num-suppliers',
     'act-comp-leadtime','act-comp-relage',
     'act-sampling','act-sample-qty','act-sample-date','act-sample-courier',
@@ -3399,6 +3404,7 @@ function renderActivityCard(a, isAdmin) {
   if(a.NextAction)        det.push(`Next: <strong>${a.NextAction}</strong>`);
   if(a.FollowupDate)      det.push(`Follow-up: <strong>${a.FollowupDate}</strong>`);
   if(a.Remarks)           det.push(`Remarks: ${a.Remarks}`);
+  if(a.AttachmentUrl)     det.push(`<a href="${a.AttachmentUrl}" target="_blank" style="color:#185fa5;display:inline-flex;align-items:center;gap:4px"><i class="ti ti-paperclip" aria-hidden="true"></i> ${a.AttachmentName||'View attachment'}</a>`);
 
   const adminActions=isAdmin
     ? `<div class="act-admin-actions">
@@ -3533,7 +3539,7 @@ async function renderPerformance() {
     return true;
   };
 
-  const reps=['Nishanth','Satheesh','Anuj','Joy'];
+  const reps=['Nishant','Satheesh','Anuj','Joy'];
   const AVATAR_COLORS=['#eef4fd:#185fa5','#eaf3de:#27500a','#faeeda:#633806','#fdf2f2:#a32d2d'];
 
   // Per-rep stats
@@ -4207,7 +4213,7 @@ function renderSTCards(samples) {
 }
 
 function renderSTAnalytics(samples) {
-  const reps = ['Nishanth','Satheesh','Anuj','Joy','User1','User2','User3'];
+  const reps = ['Nishant','Satheesh','Anuj','Joy','User1','User2','User3'];
 
   // Conversion by rep
   const convHTML = reps.map(rep => {
@@ -5150,6 +5156,7 @@ function renderAllActivities() {
       <td style="font-size:11px">${followStr}</td>
       <td style="font-size:11px;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${String(a.Requirement||'')}">${String(a.Requirement||'—')}</td>
       <td style="font-size:11px;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${String(a.NextAction||'')}">${String(a.NextAction||'—')}</td>
+      <td>${a.AttachmentUrl ? `<a href="${a.AttachmentUrl}" target="_blank" class="btn btn-sm" title="${a.AttachmentName||'View attachment'}"><i class="ti ti-paperclip" aria-hidden="true"></i></a>` : '—'}</td>
     </tr>`;
   }).join('');
 }
@@ -5167,6 +5174,144 @@ async function exportActivitiesExcel() {
   XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(rows), 'Activities');
   XLSX.writeFile(wb, `SGG_Activities_${new Date().toISOString().split('T')[0]}.xlsx`);
   toast('Activities exported', 'success');
+}
+
+
+// ══════════════════════════════════════════════
+// FILE ATTACHMENT — Upload to Google Drive
+// ══════════════════════════════════════════════
+
+let actAttachment = null; // { url, name, fileId }
+
+function handleFileDrop(event) {
+  event.preventDefault();
+  document.getElementById('act-attachment-area').style.borderColor = '#d0d0d0';
+  const file = event.dataTransfer.files[0];
+  if (file) uploadActivityFile(file);
+}
+
+function handleFileSelect(input) {
+  const file = input.files[0];
+  if (file) uploadActivityFile(file);
+  input.value = ''; // reset so same file can be reselected
+}
+
+async function uploadActivityFile(file) {
+  // Validate size — 50MB max
+  if (file.size > 50 * 1024 * 1024) {
+    toast('File too large — maximum 50MB', 'error');
+    return;
+  }
+
+  // Show progress
+  const progressEl = document.getElementById('act-upload-progress');
+  const statusEl   = document.getElementById('act-upload-status');
+  const barEl      = document.getElementById('act-upload-bar');
+  const areaEl     = document.getElementById('act-attachment-area');
+
+  progressEl.style.display = 'block';
+  areaEl.style.display     = 'none';
+  statusEl.textContent     = `Reading ${file.name}...`;
+  barEl.style.width        = '20%';
+
+  try {
+    // Read file as base64
+    const base64 = await new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload  = e => resolve(e.target.result.split(',')[1]);
+      reader.onerror = () => reject(new Error('Failed to read file'));
+      reader.readAsDataURL(file);
+    });
+
+    barEl.style.width    = '50%';
+    statusEl.textContent = `Uploading ${file.name} to Google Drive...`;
+
+    // Get company from form
+    const company = document.getElementById('act-company')?.value || 
+                    document.getElementById('act-customer-name')?.textContent || 'General';
+
+    const r = await api({
+      action:   'uploadFile',
+      fileData: base64,
+      fileName: file.name,
+      mimeType: file.type || 'application/octet-stream',
+      company:  company
+    });
+
+    barEl.style.width = '100%';
+
+    if (r.ok) {
+      actAttachment = { url: r.viewUrl, name: r.fileName, fileId: r.fileId };
+      statusEl.textContent = 'Upload complete!';
+
+      setTimeout(() => {
+        progressEl.style.display = 'none';
+        showAttachmentPreview(r.fileName, r.viewUrl);
+      }, 600);
+
+      toast(`${file.name} uploaded successfully`, 'success');
+    } else {
+      throw new Error(r.error || 'Upload failed');
+    }
+  } catch(err) {
+    progressEl.style.display = 'none';
+    areaEl.style.display     = 'block';
+    toast('Upload failed: ' + err.message, 'error');
+    console.error('Upload error:', err);
+  }
+}
+
+function showAttachmentPreview(name, url) {
+  const preview = document.getElementById('act-attachment-preview');
+  document.getElementById('act-attachment-name').textContent = name;
+  document.getElementById('act-attachment-link').href        = url;
+  preview.style.display = 'flex';
+}
+
+function removeAttachment() {
+  actAttachment = null;
+  document.getElementById('act-attachment-preview').style.display = 'none';
+  document.getElementById('act-attachment-area').style.display    = 'block';
+  document.getElementById('act-file-input').value = '';
+  toast('Attachment removed', 'success');
+}
+
+// Reset attachment on form reset
+function resetAttachmentField() {
+  actAttachment = null;
+  const preview  = document.getElementById('act-attachment-preview');
+  const area     = document.getElementById('act-attachment-area');
+  const progress = document.getElementById('act-upload-progress');
+  if (preview)  preview.style.display  = 'none';
+  if (area)     area.style.display     = 'block';
+  if (progress) progress.style.display = 'none';
+}
+
+
+// ── Form field conditional show/hide ─────────
+function updateFormFields() {
+  const form = document.getElementById('act-form').value;
+  const sizeBox = document.getElementById('act-size-box');
+  const coreBox = document.getElementById('act-core-box');
+
+  // Show Size for Sheet or Roll/Sheet
+  if (sizeBox) sizeBox.style.display = (form === 'Sheet' || form === 'Roll/Sheet') ? 'block' : 'none';
+  // Show Core for Roll or Roll/Sheet
+  if (coreBox) coreBox.style.display = (form === 'Roll' || form === 'Roll/Sheet') ? 'block' : 'none';
+}
+
+// ── Overdue override — new activity resets overdue ──
+// Called after activity saved successfully
+function refreshOverdueAfterActivity(customerId, followupDate, status) {
+  // If closed — remove from overdue
+  if (status === 'Closed Won' || status === 'Closed Lost') {
+    allActivitiesCache = allActivitiesCache.filter(a =>
+      !(a.CustomerID === customerId) ||
+      a.StatusUpdate === 'Closed Won' || a.StatusUpdate === 'Closed Lost'
+    );
+  }
+  // Refresh bell + strips with updated data
+  renderStrips();
 }
 
 // ── Topbar rotating one liner ─────────────────
