@@ -890,7 +890,7 @@ setInterval(rotateLine, 4000);
           <!-- Customer selector -->
           <div class="row2" style="gap:12px">
             <div class="form-group">
-              <label class="req">Customer Target</label>
+              <label>Customer Target</label>
               <select id="act-company" onchange="loadCustPreview()">
                 <option value="">— Choose customer —</option>
               </select>
@@ -951,7 +951,7 @@ setInterval(rotateLine, 4000);
           <div class="form-section">Technical Fit Matrix</div>
           <div class="row3" style="gap:12px">
             <div class="form-group">
-              <label class="req">Material Category</label>
+              <label>Material Category</label>
               <select id="act-category">
                 <option value="">Select *</option>
                 <option>Non-Photo</option><option>Synthetic Paper</option><option>NTP</option>
@@ -967,7 +967,7 @@ setInterval(rotateLine, 4000);
               <input type="text" id="act-prodcode" placeholder="e.g. PP-2001">
             </div>
             <div class="form-group">
-              <label class="req">Print Technology</label>
+              <label>Print Technology</label>
               <select id="act-printtech">
                 <option value="">Select *</option>
                 <option>Flexo</option><option>Digital — Indigo</option><option>Digital — Inkjet</option>
@@ -1022,15 +1022,15 @@ setInterval(rotateLine, 4000);
           <div class="form-section">Commercial Metrics & Pipeline</div>
           <div class="row4" style="gap:12px">
             <div class="form-group">
-              <label class="req">Decision Maker</label>
+              <label>Decision Maker</label>
               <input type="text" id="act-dm" placeholder="Name or position">
             </div>
             <div class="form-group">
-              <label class="req">Monthly Volume</label>
+              <label>Monthly Volume</label>
               <input type="number" id="act-qty" placeholder="0">
             </div>
             <div class="form-group">
-              <label class="req">Volume Unit</label>
+              <label>Volume Unit</label>
               <select id="act-qtyunit">
                 <option value="">Select *</option>
                 <option>Sqmtrs</option><option>Sheets</option><option>Rolls</option><option>KGS</option>
@@ -1056,7 +1056,7 @@ setInterval(rotateLine, 4000);
               <input type="number" step="0.01" id="act-ourprice" placeholder="0.00" oninput="calcPriceGap()">
             </div>
             <div class="form-group">
-              <label class="req">Customer Target Price (<span class="curr-lbl">₹</span>) <span id="price-gap-badge"></span></label>
+              <label>Customer Target Price (<span class="curr-lbl">₹</span>) <span id="price-gap-badge"></span></label>
               <input type="number" step="0.01" id="act-custprice" placeholder="0.00" oninput="calcPriceGap()">
             </div>
             <div class="form-group">
@@ -1859,7 +1859,7 @@ setInterval(rotateLine, 4000);
           </div>
           <div class="row3" style="gap:12px;margin-top:10px">
             <div class="form-group">
-              <label class="req">Material Category</label>
+              <label>Material Category</label>
               <select id="sf-category">
                 <option value="">Select *</option>
                 <option>Non-Photo</option><option>Synthetic Paper</option><option>NTP</option>
@@ -3070,35 +3070,37 @@ function startDraftAutoSave() {
 // ── Validation ────────────────────────────────
 function validateActivityForm() {
   clearFieldErrors();
-  let valid=true;
+  let valid = true;
 
-  const required=[
-    ['act-company','Customer'],
-    ['act-date','Date'],
-    ['act-type','Activity type'],
-    ['act-mode','Meeting mode'],
-    ['act-category','Material category'],
-    ['act-printtech','Print technology'],
-    ['act-width','Width (mm)'],
-    ['act-caliper','Caliper (micron)'],
-    ['act-core','Core size'],
-
-    ['act-dm','Decision maker'],
-    ['act-qty','Monthly volume'],
-    ['act-qtyunit','Volume unit'],
-
-    ['act-custprice','Customer target price'],
-
-    ['act-status','Pipeline status'],
-    ['act-nextaction','Next action'],
-    ['act-followup','Follow-up date'],
-    ['act-remarks','Remarks'],
+  // Only truly essential fields required
+  const required = [
+    ['act-company',    'Customer'],
+    ['act-date',       'Date'],
+    ['act-type',       'Activity type'],
+    ['act-mode',       'Meeting mode'],
+    ['act-status',     'Pipeline status'],
+    ['act-nextaction', 'Next action'],
+    ['act-followup',   'Follow-up date'],
+    ['act-remarks',    'Remarks'],
   ];
 
-  required.forEach(([id,lbl])=>{
-    const el=document.getElementById(id);
-    if(!el||!el.value.trim()){fieldError(id,lbl+' required');valid=false;}
+  required.forEach(([id, lbl]) => {
+    const el = document.getElementById(id);
+    if (!el || !el.value.trim()) { fieldError(id, lbl + ' required'); valid = false; }
   });
+
+  // Follow-up not required if Closed Won or Closed Lost
+  const status = document.getElementById('act-status')?.value || '';
+  if (status === 'Closed Won' || status === 'Closed Lost') {
+    const fuEl = document.getElementById('act-followup');
+    if (fuEl) fuEl.classList.remove('field-error');
+    // Re-check validity ignoring followup
+    valid = required.filter(([id]) => id !== 'act-followup').every(([id]) => {
+      const el = document.getElementById(id);
+      return el && el.value.trim();
+    });
+  }
+
   return valid;
 }
 
