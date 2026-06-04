@@ -1351,38 +1351,6 @@ setInterval(rotateLine, 4000);
             </div>
           </div>
 
-          <!-- ── ATTACHMENT SECTION ── -->
-          <div class="form-section" style="margin-top:12px">
-            Attachment <span style="font-size:10px;color:var(--muted);font-weight:400">Optional — PDF, email, quote, spec sheet (max 50MB)</span>
-          </div>
-          <div style="margin-bottom:12px">
-            <div id="act-attachment-area" style="border:1.5px dashed #d0d0d0;border-radius:8px;padding:16px;text-align:center;cursor:pointer;transition:border .2s;background:#fafafa" onclick="document.getElementById('act-file-input').click()" ondragover="event.preventDefault();this.style.borderColor='#1F3864'" ondragleave="this.style.borderColor='#d0d0d0'" ondrop="handleFileDrop(event)">
-              <i class="ti ti-upload" aria-hidden="true" style="font-size:24px;color:#bbb;display:block;margin-bottom:6px"></i>
-              <div style="font-size:12px;color:#888">Click to upload or drag & drop</div>
-              <div style="font-size:10px;color:#bbb;margin-top:3px">PDF · HTML · DOC · Images — up to 50MB</div>
-              <input type="file" id="act-file-input" style="display:none" accept=".pdf,.html,.htm,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png,.eml" onchange="handleFileSelect(this)">
-            </div>
-
-            <!-- Upload progress -->
-            <div id="act-upload-progress" style="display:none;margin-top:10px">
-              <div style="font-size:11px;color:#666;margin-bottom:4px" id="act-upload-status">Uploading...</div>
-              <div style="background:#f0f0f0;border-radius:20px;height:6px;overflow:hidden">
-                <div id="act-upload-bar" style="background:#1F3864;height:6px;width:0%;border-radius:20px;transition:width .3s"></div>
-              </div>
-            </div>
-
-            <!-- Attachment preview -->
-            <div id="act-attachment-preview" style="display:none;margin-top:10px;background:#E6F1FB;border-radius:8px;padding:10px 14px;display:none;align-items:center;gap:10px">
-              <i class="ti ti-paperclip" aria-hidden="true" style="font-size:18px;color:#185fa5;flex-shrink:0"></i>
-              <div style="flex:1;min-width:0">
-                <div id="act-attachment-name" style="font-size:12px;font-weight:600;color:#1F3864;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></div>
-                <div style="font-size:10px;color:#888;margin-top:1px">Uploaded to Google Drive</div>
-              </div>
-              <a id="act-attachment-link" href="#" target="_blank" class="btn btn-sm" style="flex-shrink:0"><i class="ti ti-external-link" aria-hidden="true"></i> View</a>
-              <button class="btn btn-sm btn-danger" onclick="removeAttachment()" title="Remove attachment" style="flex-shrink:0"><i class="ti ti-x" aria-hidden="true"></i></button>
-            </div>
-          </div>
-
           <div style="font-size:11px;color:var(--muted);margin-top:8px;padding:6px 10px;background:var(--blue-lt);border-left:3px solid var(--blue);border-radius:0">
             Fields with blue-tinted border are mandatory. The form will not submit until all required fields are filled.
           </div>
@@ -1774,7 +1742,6 @@ setInterval(rotateLine, 4000);
                 <th>Follow-up</th>
                 <th>Requirement</th>
                 <th>Next Action</th>
-                <th>Attachment</th>
               </tr></thead>
               <tbody id="acts-tbody"></tbody>
             </table>
@@ -3097,7 +3064,6 @@ function loadDraft() {
 function clearDraft() {
   try{localStorage.removeItem(DRAFT_KEY);}catch(e){}
   document.getElementById('act-draft-banner').style.display='none';
-  resetAttachmentField();
 }
 
 function startDraftAutoSave() {
@@ -3233,8 +3199,6 @@ async function submitActivity() {
     expFirstOrderDate: document.getElementById('act-first-order').value,
     leadSource:     document.getElementById('act-leadsource').value,
     remarks:        document.getElementById('act-remarks').value.trim(),
-    attachmentUrl:  actAttachment?.url  || '',
-    attachmentName: actAttachment?.name || '',
   };
 
   const r=await api({action:'saveActivity',activity});
@@ -3435,7 +3399,6 @@ function renderActivityCard(a, isAdmin) {
   if(a.NextAction)        det.push(`Next: <strong>${a.NextAction}</strong>`);
   if(a.FollowupDate)      det.push(`Follow-up: <strong>${a.FollowupDate}</strong>`);
   if(a.Remarks)           det.push(`Remarks: ${a.Remarks}`);
-  if(a.AttachmentUrl)     det.push(`<a href="${a.AttachmentUrl}" target="_blank" style="color:#185fa5;display:inline-flex;align-items:center;gap:4px"><i class="ti ti-paperclip" aria-hidden="true"></i> ${a.AttachmentName||'View attachment'}</a>`);
 
   const adminActions=isAdmin
     ? `<div class="act-admin-actions">
@@ -5187,7 +5150,6 @@ function renderAllActivities() {
       <td style="font-size:11px">${followStr}</td>
       <td style="font-size:11px;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${String(a.Requirement||'')}">${String(a.Requirement||'—')}</td>
       <td style="font-size:11px;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${String(a.NextAction||'')}">${String(a.NextAction||'—')}</td>
-      <td>${a.AttachmentUrl ? `<a href="${a.AttachmentUrl}" target="_blank" class="btn btn-sm" title="${a.AttachmentName||'View attachment'}"><i class="ti ti-paperclip" aria-hidden="true"></i></a>` : '—'}</td>
     </tr>`;
   }).join('');
 }
@@ -5205,117 +5167,6 @@ async function exportActivitiesExcel() {
   XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(rows), 'Activities');
   XLSX.writeFile(wb, `SGG_Activities_${new Date().toISOString().split('T')[0]}.xlsx`);
   toast('Activities exported', 'success');
-}
-
-
-// ══════════════════════════════════════════════
-// FILE ATTACHMENT — Upload to Google Drive
-// ══════════════════════════════════════════════
-
-let actAttachment = null; // { url, name, fileId }
-
-function handleFileDrop(event) {
-  event.preventDefault();
-  document.getElementById('act-attachment-area').style.borderColor = '#d0d0d0';
-  const file = event.dataTransfer.files[0];
-  if (file) uploadActivityFile(file);
-}
-
-function handleFileSelect(input) {
-  const file = input.files[0];
-  if (file) uploadActivityFile(file);
-  input.value = ''; // reset so same file can be reselected
-}
-
-async function uploadActivityFile(file) {
-  // Validate size — 50MB max
-  if (file.size > 50 * 1024 * 1024) {
-    toast('File too large — maximum 50MB', 'error');
-    return;
-  }
-
-  // Show progress
-  const progressEl = document.getElementById('act-upload-progress');
-  const statusEl   = document.getElementById('act-upload-status');
-  const barEl      = document.getElementById('act-upload-bar');
-  const areaEl     = document.getElementById('act-attachment-area');
-
-  progressEl.style.display = 'block';
-  areaEl.style.display     = 'none';
-  statusEl.textContent     = `Reading ${file.name}...`;
-  barEl.style.width        = '20%';
-
-  try {
-    // Read file as base64
-    const base64 = await new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload  = e => resolve(e.target.result.split(',')[1]);
-      reader.onerror = () => reject(new Error('Failed to read file'));
-      reader.readAsDataURL(file);
-    });
-
-    barEl.style.width    = '50%';
-    statusEl.textContent = `Uploading ${file.name} to Google Drive...`;
-
-    // Get company from form
-    const company = document.getElementById('act-company')?.value || 
-                    document.getElementById('act-customer-name')?.textContent || 'General';
-
-    const r = await api({
-      action:   'uploadFile',
-      fileData: base64,
-      fileName: file.name,
-      mimeType: file.type || 'application/octet-stream',
-      company:  company
-    });
-
-    barEl.style.width = '100%';
-
-    if (r.ok) {
-      actAttachment = { url: r.viewUrl, name: r.fileName, fileId: r.fileId };
-      statusEl.textContent = 'Upload complete!';
-
-      setTimeout(() => {
-        progressEl.style.display = 'none';
-        showAttachmentPreview(r.fileName, r.viewUrl);
-      }, 600);
-
-      toast(`${file.name} uploaded successfully`, 'success');
-    } else {
-      throw new Error(r.error || 'Upload failed');
-    }
-  } catch(err) {
-    progressEl.style.display = 'none';
-    areaEl.style.display     = 'block';
-    toast('Upload failed: ' + err.message, 'error');
-    console.error('Upload error:', err);
-  }
-}
-
-function showAttachmentPreview(name, url) {
-  const preview = document.getElementById('act-attachment-preview');
-  document.getElementById('act-attachment-name').textContent = name;
-  document.getElementById('act-attachment-link').href        = url;
-  preview.style.display = 'flex';
-}
-
-function removeAttachment() {
-  actAttachment = null;
-  document.getElementById('act-attachment-preview').style.display = 'none';
-  document.getElementById('act-attachment-area').style.display    = 'block';
-  document.getElementById('act-file-input').value = '';
-  toast('Attachment removed', 'success');
-}
-
-// Reset attachment on form reset
-function resetAttachmentField() {
-  actAttachment = null;
-  const preview  = document.getElementById('act-attachment-preview');
-  const area     = document.getElementById('act-attachment-area');
-  const progress = document.getElementById('act-upload-progress');
-  if (preview)  preview.style.display  = 'none';
-  if (area)     area.style.display     = 'block';
-  if (progress) progress.style.display = 'none';
 }
 
 // ── Topbar rotating one liner ─────────────────
